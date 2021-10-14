@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class FolderDataDukung extends CI_Controller {
+class DataDukung extends CI_Controller {
+	var $table_name = 'data_dukung';
     public function __construct()
     {
         parent::__construct();
@@ -17,7 +18,7 @@ class FolderDataDukung extends CI_Controller {
 			if($check_auth_client == true){
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->get_all_rows_table('folder_data_dukung');
+		        		$resp = $this->MyModel->get_all_rows_table($this->table_name);//GET SEMUA ROW TABEL
 	    				json_output($response['status'],$resp);
 		        	}
 			}
@@ -36,11 +37,11 @@ class FolderDataDukung extends CI_Controller {
 		        	$respStatus = $response['status'];
 		        	if($response['status'] == 200){
 						$params = json_decode(file_get_contents('php://input'), TRUE);
-						if (empty($params['uraian'])) {//jika kosong
+						if (empty($params['id_folder']) || empty($params['uraian']) || empty($params['url_file'])) {//ISI NAMA PARAMETER INPUT POST NYA
 							$respStatus = 400;
-							$resp = array('status' => 400,'message' =>  'Uraian folder tidak boleh kosong');
+							$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 						} else {
-								$resp = $this->MyModel->insert_to_table('folder_data_dukung',$params);
+								$resp = $this->MyModel->insert_to_table($this->table_name,$params);
 						}
 						json_output($respStatus,$resp);
 		        	}
@@ -61,14 +62,14 @@ class FolderDataDukung extends CI_Controller {
 				if($response['status'] == 200){
 					$params = json_decode(file_get_contents('php://input'), TRUE);
 					$params['updated_at'] = date('Y-m-d H:i:s');
-					if (empty($params['uraian'])) {
+					if (empty($params['id_folder']) || empty($params['uraian']) || empty($params['url_file'])) { //CEK PARAMETER INPUT NYA
 						$respStatus = 400;
-						$resp = array('status' => 400,'message' =>  'Uraian tidak boleh kosong');
+						$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 					} else {
-		        			$resp = $this->MyModel->update_data_table('folder_data_dukung',$id,$params);
+		        			$resp = $this->MyModel->update_data_table($this->table_name,$id,$params);
 					}
 					json_output($respStatus,$resp);
-		       		}
+		       	}
 			}
 		}
 	}
@@ -83,7 +84,7 @@ class FolderDataDukung extends CI_Controller {
 			if($check_auth_client == true){
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->delete_data_table('folder_data_dukung',$id);
+		        		$resp = $this->MyModel->delete_data_table($this->table_name,$id); //DELETE SINGLE ROW
 					json_output($response['status'],$resp);
 		        	}
 			}

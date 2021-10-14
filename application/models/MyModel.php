@@ -81,7 +81,7 @@ class MyModel extends CI_Model {
 
     public function folderdatadukung_all_data()
     {
-        return $this->db->select('uraian')->from('folder_data_dukung')->order_by('id','asc')->get()->result();
+        return $this->db->select('*')->from('folder_data_dukung')->order_by('id','asc')->get()->result();
     }
 
     public function book_detail_data($id)
@@ -89,17 +89,43 @@ class MyModel extends CI_Model {
         return $this->db->select('id,title,author')->from('books')->where('id',$id)->order_by('id','desc')->get()->row();
     }
 
+    public function get_all_rows_table($table_name)
+    {
+        return $this->db->select('*')->from($table_name)->order_by('id','asc')->get()->result();
+    }
+
     public function insert_to_table($table_name, $data){
-        try{
-            $this->db->insert($table_name,$data);
-            $db_error = $this->db->error(); //cek kalo ada error
-            if (!empty($db_error)) {
-                throw new Exception('Database error! Error Code [' . $db_error['code'] . '] Error: ' . $db_error['message']);
-            }
-            return array('status' => 201,'message' => 'Data berhasil di-insert');
-        } catch(Exception $e){
-            return array('status' => 500,'message' => $e->getMessage());
-        }
+        // try{
+        //     $this->db->insert($table_name,$data);
+        //     $db_error = $this->db->error(); //cek kalo ada error
+        //     if (!empty($db_error)) {
+        //         throw new Exception('Database error! Error Code [' . $db_error['code'] . '] Error: ' . $db_error['message']);
+        //     }
+        //     return array('status' => 201,'message' => 'Data berhasil di-insert');
+        // } catch(Exception $e){
+        //     return array('status' => 500,'message' => $e->getMessage());
+        // }
+        $this->db->insert($table_name,$data);
+        return array('status' => 201,'message' => 'Data berhasil di-insert');
+    }
+
+    public function update_data_table($table_name, $id,$data)
+    {
+        if($this->is_exist($table_name, $id)){
+            $this->db->where('id',$id)->update($table_name,$data);
+            return array('status' => 200,'message' => 'Data berhasil di update');
+        } 
+        else return array('status' => 200,'message' => 'Tidak ada ID yang cocok');
+
+    }
+
+    public function delete_data_table($table_name, $id)
+    {
+        if($this->is_exist($table_name, $id)){
+            $this->db->where('id',$id)->delete($table_name);
+            return array('status' => 200,'message' => 'Data has been deleted.');
+        } 
+        else return array('status' => 200,'message' => 'There is no matching ID.');
     }
 
     public function book_create_data($data)
