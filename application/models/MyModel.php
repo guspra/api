@@ -18,13 +18,16 @@ class MyModel extends CI_Model {
 
     public function login($username,$password)
     { 
-        $q  = $this->db->select('password,id')->from('users')->where('username',$username)->get()->row();
+        $q  = $this->db->select('password,id,role,nama,lokasi')->from('users')->where('username',$username)->get()->row();
         if($q == ""){
             // echo 'wkwk';
             return array('status' => 400,'message' => 'Username not found.');
         } else {
             $hashed_password = $q->password;
             $id              = $q->id;
+            $role = $q->role;
+            $nama = $q->nama;
+            $lokasi = $q->lokasi;
             if (hash_equals($hashed_password, crypt($password, $hashed_password))) {
                $last_login = date('Y-m-d H:i:s');
                $token = crypt(substr( md5(rand()), 0, 7),"coba-salt");
@@ -37,7 +40,10 @@ class MyModel extends CI_Model {
                   return array('status' => 500,'message' => 'Internal server error.');
                } else {
                   $this->db->trans_commit();
-                  return array('status' => 200,'message' => 'Successfully login.','id' => $id, 'token' => $token);
+                  return array('status' => 200,'message' => 'Successfully login.',
+                                'id' => $id, 'token' => $token,
+                                'nama' => $nama, 'lokasi' => $lokasi,'role' => $role
+                                );
                }
             } else {
                return array('status' => 400,'message' => 'Wrong password.');
