@@ -95,6 +95,11 @@ class MyModel extends CI_Model {
         return $this->db->select('id,title,author')->from('books')->where('id',$id)->order_by('id','desc')->get()->row();
     }
 
+    public function get_row_detail($table, $id)
+    {
+        return $this->db->select('*')->from($table)->where('id',$id)->order_by('id','desc')->get()->row();
+    }
+
     public function get_all_rows_table($table_name)
     {
         return $this->db->select('*')->from($table_name)->order_by('id','asc')->get()->result();

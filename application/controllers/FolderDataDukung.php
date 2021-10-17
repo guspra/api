@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class FolderDataDukung extends CI_Controller {
+
+	var $table_name = 'folder_data_dukung';
+
     public function __construct()
     {
         parent::__construct();
@@ -17,8 +20,25 @@ class FolderDataDukung extends CI_Controller {
 			if($check_auth_client == true){
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->get_all_rows_table('folder_data_dukung');
+		        		$resp = $this->MyModel->get_all_rows_table($this->table_name);
 	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
+	public function detail($id)
+	{
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->get_row_detail($this->table_name,$id);
+						json_output($response['status'],$resp);
 		        	}
 			}
 		}
@@ -40,7 +60,7 @@ class FolderDataDukung extends CI_Controller {
 							$respStatus = 400;
 							$resp = array('status' => 400,'message' =>  'Uraian folder tidak boleh kosong');
 						} else {
-								$resp = $this->MyModel->insert_to_table('folder_data_dukung',$params);
+								$resp = $this->MyModel->insert_to_table($this->table_name,$params);
 						}
 						json_output($respStatus,$resp);
 		        	}
@@ -65,7 +85,7 @@ class FolderDataDukung extends CI_Controller {
 						$respStatus = 400;
 						$resp = array('status' => 400,'message' =>  'Uraian tidak boleh kosong');
 					} else {
-		        			$resp = $this->MyModel->update_data_table('folder_data_dukung',$id,$params);
+		        			$resp = $this->MyModel->update_data_table($this->table_name,$id,$params);
 					}
 					json_output($respStatus,$resp);
 		       		}
@@ -83,7 +103,7 @@ class FolderDataDukung extends CI_Controller {
 			if($check_auth_client == true){
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->delete_data_table('folder_data_dukung',$id);
+		        		$resp = $this->MyModel->delete_data_table($this->table_name,$id);
 					json_output($response['status'],$resp);
 		        	}
 			}

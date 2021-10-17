@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class DataDukung extends CI_Controller {
 	var $table_name = 'data_dukung';
+
     public function __construct()
     {
         parent::__construct();
@@ -20,6 +21,23 @@ class DataDukung extends CI_Controller {
 		        	if($response['status'] == 200){
 		        		$resp = $this->MyModel->get_all_rows_table($this->table_name);//GET SEMUA ROW TABEL
 	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
+	public function detail($id) //parameter didapet dari url
+	{
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->get_row_detail($this->table_name,$id);
+						json_output($response['status'],$resp);
 		        	}
 			}
 		}
