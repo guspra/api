@@ -31,7 +31,7 @@ class MyModel extends CI_Model {
             if (hash_equals($hashed_password, crypt($password, $hashed_password))) {
                $last_login = date('Y-m-d H:i:s');
                $token = crypt(substr( md5(rand()), 0, 7),"coba-salt");
-               $expired_at = date("Y-m-d H:i:s", strtotime('+12 hours'));
+               $expired_at = date("Y-m-d H:i:s", strtotime('+999 hours'));
                $this->db->trans_start();
                $this->db->where('id',$id)->update('users',array('last_login' => $last_login));
                $this->db->insert('users_authentication',array('users_id' => $id,'token' => $token,'expired_at' => $expired_at));
