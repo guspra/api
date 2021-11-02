@@ -17,6 +17,8 @@ class Coba extends CI_Controller {
 	public function index()
 	{
 		$this->MyModel->coba();
+		// echo $this->MyModel->get_total_pagu("409226");
+
 	}
 
 }

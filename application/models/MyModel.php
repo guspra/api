@@ -175,13 +175,39 @@ class MyModel extends CI_Model {
         else return array('status' => 200,'message' => 'There is no matching ID.');
     }
 
+    public function delete_all_rows($table_name)
+    {
+        $this->db->truncate($table_name);
+    }
+
+    public function total_pagu_by_kode_satker($kode_satker){
+        $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_dipa WHERE kode_satker = $kode_satker")->result();
+        return $result[0]->jumlah;
+    }
+
+    public function total_realisasi_by_kode_satker($kode_satker){
+        $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_realisasi WHERE kode_satker = $kode_satker")->result();
+        return $result[0]->jumlah;
+    }
+    
+    public function total_pagu(){
+        return $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_dipa GROUP BY kode_satker")->result();
+    }
+
+    public function total_realisasi(){
+        return $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_realisasi GROUP BY kode_satker")->result();
+    }
+
     public function coba(){
         
         //DAPETIN TOTAL ANGGARAN DIPA HAM
-        $result2 = $this->db->query('select sum(nominal_akun) as jumlah from data_api_dipa where kode_satker = "409225"')->result();
+        // $result2 = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM $table_name WHERE kode_satker = $kode_satker")->result();
+        // $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_dipa WHERE kode_satker = '409225'")->result();
+        $result = $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_dipa GROUP BY kode_satker")->result();
 
-        // var_dump($result2);
-        echo $result2[0]->jumlah;
+        // var_dump($result);
+        echo json_encode($result);
+        // echo $result2[0]->jumlah;
     }
 
 }
