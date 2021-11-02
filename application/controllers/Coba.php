@@ -16,13 +16,7 @@ class Coba extends CI_Controller {
 
 	public function index()
 	{
-		$a = 'aa';
-		$b = 'bb';
-
-		// echo $a.$b;
-		$ar=[];
-		// $ar[0] = 0;
-		echo (sizeof($ar) > 0 ? "lebih dari nol" : "nol");
+		$this->MyModel->coba();
 	}
 
 }

@@ -18,7 +18,7 @@ class MyModel extends CI_Model {
 
     public function login($username,$password)
     { 
-        $q  = $this->db->select('password,id,role,nama,lokasi,kode_dipa')->from('users')->where('username',$username)->get()->row();
+        $q  = $this->db->select('password,id,role,nama,lokasi,id_dipa')->from('users')->where('username',$username)->get()->row();
         if($q == ""){
             // echo 'wkwk';
             return array('status' => 400,'message' => 'Username not found.');
@@ -28,7 +28,7 @@ class MyModel extends CI_Model {
             $role = $q->role;
             $nama = $q->nama;
             $lokasi = $q->lokasi;
-            $kode_dipa = $q->kode_dipa;
+            $id_dipa = $q->id_dipa;
             if (hash_equals($hashed_password, crypt($password, $hashed_password))) {
                $last_login = date('Y-m-d H:i:s');
                $token = crypt(substr( md5(rand()), 0, 7),"coba-salt");
@@ -44,7 +44,7 @@ class MyModel extends CI_Model {
                   return array('status' => 200,'message' => 'Successfully login.',
                                 'id' => $id, 'token' => $token,
                                 'nama' => $nama, 'lokasi' => $lokasi,'role' => $role,
-                                'kode_dipa' => $kode_dipa
+                                'id_dipa' => $id_dipa
                                 );
                }
             } else {
@@ -173,6 +173,15 @@ class MyModel extends CI_Model {
             return array('status' => 200,'message' => 'Data has been deleted.');
         } 
         else return array('status' => 200,'message' => 'There is no matching ID.');
+    }
+
+    public function coba(){
+        
+        //DAPETIN TOTAL ANGGARAN DIPA HAM
+        $result2 = $this->db->query('select sum(nominal_akun) as jumlah from data_api_dipa where kode_satker = "409225"')->result();
+
+        // var_dump($result2);
+        echo $result2[0]->jumlah;
     }
 
 }
