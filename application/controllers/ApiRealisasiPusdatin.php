@@ -57,6 +57,14 @@ class ApiRealisasiPusdatin extends CI_Controller {
 
 		$data_api_dipa = [];
 		$counter = 0;
+
+		// 51: belanja pegawai
+		// 52: belanja barang
+		// 53: belanja modal
+		$total_belanja_pegawai = 0;
+		$total_belanja_barang = 0;
+		$total_belanja_modal = 0;
+
 		foreach($array_dipa as $key => $value){
 			$data_api_dipa['kode_satker'] = (empty($value->{'KODE SATKER'}) ? "null" : $value->{'KODE SATKER'});
 			$data_api_dipa['kode_kementerian'] = (empty($value->{'kddept'}) ? "null" : $value->{'kddept'});
@@ -69,7 +77,7 @@ class ApiRealisasiPusdatin extends CI_Controller {
 			$data_api_dipa['nama_program'] = (empty($value->{'nama_program'}) ? "null" : $value->{'nama_program'});
 			$data_api_dipa['nama_kegiatan'] = (empty($value->{'nama_kegiatan'}) ? "null" : $value->{'nama_kegiatan'});
 			$data_api_dipa['nama_kro'] = (empty($value->{'nmoutput'}) ? "null" : $value->{'nmoutput'});
-			$data_api_dipa['nominal_akun'] = (empty($value->{'AMOUNT'}) ? "null" : $value->{'AMOUNT'});
+			$data_api_dipa['nominal_akun'] = (empty($value->{'AMOUNT'}) ? 0 : $value->{'AMOUNT'});
 			
 			$data_api_dipa['sumber_dana'] = (empty($value->{'SUMBER_DANA'}) ? "null" : $value->{'SUMBER_DANA'});
 			$data_api_dipa['cara_tarik'] = (empty($value->{'CARA_TARIK'}) ? "null" : $value->{'CARA_TARIK'});
@@ -79,9 +87,23 @@ class ApiRealisasiPusdatin extends CI_Controller {
 
 			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api_dipa);
 			$counter++;
+
+			// echo $data_api_dipa['nominal_akun']."\n";
+
+			if($data_api_dipa['kode_satker'] === "409226")
+			if(strpos($data_api_dipa['kode_akun'], "51") !== false){
+				$total_belanja_pegawai += $data_api_dipa['nominal_akun'];
+			} else if(strpos($data_api_dipa['kode_akun'], "52") !== false){
+				$total_belanja_barang += $data_api_dipa['nominal_akun'];
+			} else if(strpos($data_api_dipa['kode_akun'], "53") !== false){
+				$total_belanja_modal += $data_api_dipa['nominal_akun'];
+			}
+
+
 		}
 
-		json_output(400,$counter);
+		// json_output(400,$counter);
+		json_output(400,"jumlah_baris: $counter --- total_belanja_pegawai: $total_belanja_pegawai --- total_belanja_barang: $total_belanja_barang --- total_belanja_modal: $total_belanja_modal");
 	}
 
 }
