@@ -5,6 +5,7 @@ class MyModel extends CI_Model {
 
     var $client_service = "frontend-client";
     var $auth_key       = "simplerestapi";
+    var $durasi_login = "9999";
 
     public function check_auth_client(){
         $client_service = $this->input->get_request_header('Client-Service', TRUE);
@@ -32,7 +33,7 @@ class MyModel extends CI_Model {
             if (hash_equals($hashed_password, crypt($password, $hashed_password))) {
                $last_login = date('Y-m-d H:i:s');
                $token = crypt(substr( md5(rand()), 0, 7),"coba-salt");
-               $expired_at = date("Y-m-d H:i:s", strtotime('+999 hours'));
+               $expired_at = date("Y-m-d H:i:s", strtotime("+$this->durasi_login hours"));
                $this->db->trans_start();
                $this->db->where('id',$id)->update('users',array('last_login' => $last_login));
                $this->db->insert('users_authentication',array('users_id' => $id,'token' => $token,'expired_at' => $expired_at));
@@ -75,7 +76,7 @@ class MyModel extends CI_Model {
                 return json_output(401,array('status' => 401,'message' => 'Your session has been expired.'));
             } else {
                 $updated_at = date('Y-m-d H:i:s');
-                $expired_at = date("Y-m-d H:i:s", strtotime('+12 hours'));
+                $expired_at = date("Y-m-d H:i:s", strtotime("+$this->durasi_login hours"));
                 $this->db->where('users_id',$users_id)->where('token',$token)->update('users_authentication',array('expired_at' => $expired_at,'updated_at' => $updated_at));
                 return array('status' => 200,'message' => 'Authorized.');
             }
