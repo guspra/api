@@ -181,6 +181,10 @@ class MyModel extends CI_Model {
         $this->db->truncate($table_name);
     }
 
+    public function delete_where($table_name, $column_name, $value){
+        $this->db->query("DELETE FROM $table_name WHERE $column_name = $value");
+    }
+
     public function total_pagu_by_kode_satker($kode_satker){
         $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_dipa WHERE kode_satker = $kode_satker")->result();
         return $result[0]->jumlah;
@@ -190,6 +194,29 @@ class MyModel extends CI_Model {
         $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_realisasi WHERE kode_satker = $kode_satker")->result();
         return $result[0]->jumlah;
     }
+
+    public function total_realisasi_by_kode_satker_monsakti($kode_satker){
+        $result = $this->db->query("SELECT SUM(jumlah_realisasi) AS jumlah FROM api_monsakti_realisasi WHERE kode_satker = $kode_satker")->result();
+        return $result[0]->jumlah;
+    }
+
+    public function total_realisasi_jenis_belanja_by_kode_satker($kode_satker){
+        return $this->db->query("SELECT SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(nominal_akun) AS total_realisasi FROM data_api_realisasi WHERE kode_satker = $kode_satker GROUP BY SUBSTRING(kode_akun, 1,2) ")->result();
+    }
+
+    public function total_realisasi_jenis_belanja_monsakti(){
+        return $this->db->query("SELECT kode_satker, SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(jumlah_realisasi) AS total_realisasi FROM api_monsakti_realisasi GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
+    }
+
+    public function total_realisasi_jenis_belanja_by_kode_satker_monsakti($kode_satker){
+        return $this->db->query("SELECT SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(jumlah_realisasi) AS total_realisasi FROM api_monsakti_realisasi WHERE kode_satker = $kode_satker GROUP BY SUBSTRING(kode_akun, 1,2) ")->result();
+    }
+
+    public function total_realisasi_jenis_belanja(){
+        return $this->db->query("SELECT kode_satker, SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(nominal_akun) AS total_realisasi FROM data_api_realisasi GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
+    }
+
+    
     
     public function total_pagu(){
         return $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_dipa GROUP BY kode_satker")->result();
@@ -199,16 +226,19 @@ class MyModel extends CI_Model {
         return $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_realisasi GROUP BY kode_satker")->result();
     }
 
+    public function total_realisasi_monsakti(){
+        return $this->db->query("SELECT kode_satker, SUM(jumlah_realisasi) AS jumlah FROM api_monsakti_realisasi GROUP BY kode_satker")->result();
+    }
+
     public function coba(){
         
         //DAPETIN TOTAL ANGGARAN DIPA HAM
-        // $result2 = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM $table_name WHERE kode_satker = $kode_satker")->result();
-        // $result = $this->db->query("SELECT SUM(nominal_akun) AS jumlah FROM data_api_dipa WHERE kode_satker = '409225'")->result();
-        $result = $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_dipa GROUP BY kode_satker")->result();
+        // $result = $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM data_api_dipa GROUP BY kode_satker")->result();
+        // echo json_encode($result);
 
-        // var_dump($result);
+        $result = $this->db->query("SELECT SUBSTRING(kode_akun, 1,2) AS JENIS_BELANJA, SUM(nominal_akun) AS TOTAL_REALISASI FROM data_api_realisasi GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
+        
         echo json_encode($result);
-        // echo $result2[0]->jumlah;
     }
 
 }
