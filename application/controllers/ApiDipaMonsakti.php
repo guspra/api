@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ApiDipaMonsakti extends CI_Controller {
 
-	var $table_name = 'data_api_dipa';
+	var $table_name = 'api_dipa_monsakti';
 
 	public function __construct()
     {

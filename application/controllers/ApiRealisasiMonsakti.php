@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ApiRealisasiMonsakti extends CI_Controller {
 
-	var $table_name = 'api_monsakti_realisasi';
+	var $table_name = 'api_realisasi_monsakti';
 	var $semua_kode_satker = ["407607","407613","407622","407638","407644","407653",
 							  "408247","408649","409220","409221","409222","409223",
 							  "409224","409225","409226","409227","409228","418351",
@@ -99,7 +99,7 @@ class ApiRealisasiMonsakti extends CI_Controller {
 
 		$array_dipa = $this->apidata($kode_satker);
 
-		$data_api_dipa = [];
+		$data_api = [];
 		$counter = 0;
 		
 		// 51: belanja pegawai
@@ -110,55 +110,55 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		$total_belanja_modal = 0;
 
 		foreach($array_dipa as $key => $value){
-			$data_api_dipa['kode_kementerian'] = (empty($value->{'KODE_KEMENTERIAN'}) ? "null" : $value->{'KODE_KEMENTERIAN'});
-			$data_api_dipa['kode_satker'] = (empty($value->{'KDSATKER'}) ? "null" : $value->{'KDSATKER'});
-			$data_api_dipa['kode_program'] = (empty($value->{'PROGRAM'}) ? "null" : $value->{'PROGRAM'});
-			$data_api_dipa['kode_kegiatan'] = (empty($value->{'KEGIATAN'}) ? "null" : $value->{'KEGIATAN'});
-			$data_api_dipa['kode_kro'] = (empty($value->{'OUTPUT'}) ? "null" : $value->{'OUTPUT'});
-			$data_api_dipa['kode_sumber_dana'] = (empty($value->{'SUMBER_DANA'}) ? "null" : $value->{'SUMBER_DANA'});
-			$data_api_dipa['kode_akun'] = (empty($value->{'AKUN'}) ? "null" : $value->{'AKUN'});
-			$data_api_dipa['jumlah_realisasi'] = (empty($value->{'JUMLAH_REALISASI'}) ? 0 : $value->{'JUMLAH_REALISASI'});
-			$data_api_dipa['tanggal_realisasi'] = (empty($value->{'TANGGAL_REALISASI'}) ? "null" : $value->{'TANGGAL_REALISASI'});
+			$data_api['kode_kementerian'] = (empty($value->{'KODE_KEMENTERIAN'}) ? "null" : $value->{'KODE_KEMENTERIAN'});
+			$data_api['kode_satker'] = (empty($value->{'KDSATKER'}) ? "null" : $value->{'KDSATKER'});
+			$data_api['kode_program'] = (empty($value->{'PROGRAM'}) ? "null" : $value->{'PROGRAM'});
+			$data_api['kode_kegiatan'] = (empty($value->{'KEGIATAN'}) ? "null" : $value->{'KEGIATAN'});
+			$data_api['kode_kro'] = (empty($value->{'OUTPUT'}) ? "null" : $value->{'OUTPUT'});
+			$data_api['kode_sumber_dana'] = (empty($value->{'SUMBER_DANA'}) ? "null" : $value->{'SUMBER_DANA'});
+			$data_api['kode_akun'] = (empty($value->{'AKUN'}) ? "null" : $value->{'AKUN'});
+			$data_api['jumlah_realisasi'] = (empty($value->{'JUMLAH_REALISASI'}) ? 0 : $value->{'JUMLAH_REALISASI'});
+			$data_api['tanggal_realisasi'] = (empty($value->{'TANGGAL_REALISASI'}) ? "null" : $value->{'TANGGAL_REALISASI'});
 
-			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api_dipa);
+			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api);
 			$counter++;
 
 			
 			
-			if(substr($data_api_dipa['kode_akun'],0,2) === "51"){
-				$total_belanja_pegawai += $data_api_dipa['jumlah_realisasi'];
-			} else if(substr($data_api_dipa['kode_akun'],0,2) === "52"){
-				$total_belanja_barang += $data_api_dipa['jumlah_realisasi'];
-			} else if(substr($data_api_dipa['kode_akun'],0,2) === "53"){
-				$total_belanja_modal += $data_api_dipa['jumlah_realisasi'];
+			if(substr($data_api['kode_akun'],0,2) === "51"){
+				$total_belanja_pegawai += $data_api['jumlah_realisasi'];
+			} else if(substr($data_api['kode_akun'],0,2) === "52"){
+				$total_belanja_barang += $data_api['jumlah_realisasi'];
+			} else if(substr($data_api['kode_akun'],0,2) === "53"){
+				$total_belanja_modal += $data_api['jumlah_realisasi'];
 			}
 			
 			
-			// if(strpos($data_api_dipa['kode_akun'], "51") !== false){
-			// 	$total_belanja_pegawai += $data_api_dipa['jumlah_realisasi'];
-			// } else if(strpos($data_api_dipa['kode_akun'], "52") !== false){
-			// 	$total_belanja_barang += $data_api_dipa['jumlah_realisasi'];
-			// } else if(strpos($data_api_dipa['kode_akun'], "53") !== false){
-			// 	$total_belanja_modal += $data_api_dipa['jumlah_realisasi'];
+			// if(strpos($data_api['kode_akun'], "51") !== false){
+			// 	$total_belanja_pegawai += $data_api['jumlah_realisasi'];
+			// } else if(strpos($data_api['kode_akun'], "52") !== false){
+			// 	$total_belanja_barang += $data_api['jumlah_realisasi'];
+			// } else if(strpos($data_api['kode_akun'], "53") !== false){
+			// 	$total_belanja_modal += $data_api['jumlah_realisasi'];
 			// }
 
 			//ABSOLUTE
-			// if(strpos($data_api_dipa['kode_akun'], "51") !== false){
-			// 	$total_belanja_pegawai += abs($data_api_dipa['jumlah_realisasi']);
-			// } else if(strpos($data_api_dipa['kode_akun'], "52") !== false){
-			// 	$total_belanja_barang += abs($data_api_dipa['jumlah_realisasi']);
-			// } else if(strpos($data_api_dipa['kode_akun'], "53") !== false){
-			// 	$total_belanja_modal += abs($data_api_dipa['jumlah_realisasi']);
+			// if(strpos($data_api['kode_akun'], "51") !== false){
+			// 	$total_belanja_pegawai += abs($data_api['jumlah_realisasi']);
+			// } else if(strpos($data_api['kode_akun'], "52") !== false){
+			// 	$total_belanja_barang += abs($data_api['jumlah_realisasi']);
+			// } else if(strpos($data_api['kode_akun'], "53") !== false){
+			// 	$total_belanja_modal += abs($data_api['jumlah_realisasi']);
 			// }
 
 			//MINUS TIDAK DIHITUNG
-			// $jumlah_realisasi = 0 + $data_api_dipa['jumlah_realisasi'];
+			// $jumlah_realisasi = 0 + $data_api['jumlah_realisasi'];
 			// if($jumlah_realisasi < 0){ $jumlah_realisasi = 0;}
-			// if(strpos($data_api_dipa['kode_akun'], "51") !== false){
+			// if(strpos($data_api['kode_akun'], "51") !== false){
 			// 	$total_belanja_pegawai += $jumlah_realisasi;
-			// } else if(strpos($data_api_dipa['kode_akun'], "52") !== false){
+			// } else if(strpos($data_api['kode_akun'], "52") !== false){
 			// 	$total_belanja_barang += $jumlah_realisasi;
-			// } else if(strpos($data_api_dipa['kode_akun'], "53") !== false){
+			// } else if(strpos($data_api['kode_akun'], "53") !== false){
 			// 	$total_belanja_modal += $jumlah_realisasi;
 			// }
 		}

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ApiDipaPusdatin extends CI_Controller {
 
-	var $table_name = 'data_api_dipa';
+	var $table_name = 'api_dipa_pusdatin';
 
 	public function __construct()
     {
@@ -64,7 +64,7 @@ class ApiDipaPusdatin extends CI_Controller {
 		// $kode_gabungan_unitorg_unitkerja = array();
 		// $kode_satker = [];
 		// $satker = array();
-		$data_api_dipa = [];
+		$data_api = [];
 		$counter = 0;
 		foreach($array_dipa as $key => $value){
 			// $kode_gabungan = $value->{'KODE GABUNGAN'};
@@ -72,20 +72,20 @@ class ApiDipaPusdatin extends CI_Controller {
 			// array_push($kode_gabungan_unitorg_unitkerja, $kode_gabungan);
 			// array_push($kode_satker, $value->{'KODE SATKER'});
 			// $satker[$kode_gabungan] = $value->{'NAMA SATKER'};
-			$data_api_dipa['kode_satker'] = (empty($value->{'KODE SATKER'}) ? "null" : $value->{'KODE SATKER'});
-			$data_api_dipa['kode_kementerian'] = (empty($value->{'kddept'}) ? "null" : $value->{'kddept'});
-			$data_api_dipa['kode_eselon_satu'] = (empty($value->{'kdunit'}) ? "null" : $value->{'kdunit'});
-			$data_api_dipa['kode_program'] = (empty($value->{'kdprogram'}) ? "null" : $value->{'kdprogram'});
-			$data_api_dipa['kode_kegiatan'] = (empty($value->{'kdgiat'}) ? "null" : $value->{'kdgiat'});
-			$data_api_dipa['kode_kro'] = (empty($value->{'kdoutput'}) ? "null" : $value->{'kdoutput'});
-			$data_api_dipa['kode_akun'] = (empty($value->{'AKUN'}) ? "null" : $value->{'AKUN'});
-			$data_api_dipa['nama_satker'] = (empty($value->{'NAMA SATKER'}) ? "null" : $value->{'NAMA SATKER'});
-			$data_api_dipa['nama_program'] = (empty($value->{'nama_program'}) ? "null" : $value->{'nama_program'});
-			$data_api_dipa['nama_kegiatan'] = (empty($value->{'nama_kegiatan'}) ? "null" : $value->{'nama_kegiatan'});
-			$data_api_dipa['nama_kro'] = (empty($value->{'nmoutput'}) ? "null" : $value->{'nmoutput'});
-			$data_api_dipa['nominal_akun'] = (empty($value->{'AMOUNT'}) ? "null" : $value->{'AMOUNT'});
+			$data_api['kode_satker'] = (empty($value->{'KODE SATKER'}) ? "null" : $value->{'KODE SATKER'});
+			$data_api['kode_kementerian'] = (empty($value->{'kddept'}) ? "null" : $value->{'kddept'});
+			$data_api['kode_eselon_satu'] = (empty($value->{'kdunit'}) ? "null" : $value->{'kdunit'});
+			$data_api['kode_program'] = (empty($value->{'kdprogram'}) ? "null" : $value->{'kdprogram'});
+			$data_api['kode_kegiatan'] = (empty($value->{'kdgiat'}) ? "null" : $value->{'kdgiat'});
+			$data_api['kode_kro'] = (empty($value->{'kdoutput'}) ? "null" : $value->{'kdoutput'});
+			$data_api['kode_akun'] = (empty($value->{'AKUN'}) ? "null" : $value->{'AKUN'});
+			$data_api['nama_satker'] = (empty($value->{'NAMA SATKER'}) ? "null" : $value->{'NAMA SATKER'});
+			$data_api['nama_program'] = (empty($value->{'nama_program'}) ? "null" : $value->{'nama_program'});
+			$data_api['nama_kegiatan'] = (empty($value->{'nama_kegiatan'}) ? "null" : $value->{'nama_kegiatan'});
+			$data_api['nama_kro'] = (empty($value->{'nmoutput'}) ? "null" : $value->{'nmoutput'});
+			$data_api['nominal_akun'] = (empty($value->{'AMOUNT'}) ? "null" : $value->{'AMOUNT'});
 
-			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api_dipa);
+			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api);
 			$counter++;
 		}
 

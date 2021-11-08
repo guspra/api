@@ -16,10 +16,9 @@ class Coba extends CI_Controller {
 
 	public function index()
 	{
-		$s = "-50";
+		// var_dump($this->MyModel->get_last_id("pelaksanaan_anggaran"));
+		// echo $this->MyModel->get_last_id("pelaksanaan_anggaran");
 
-		var_dump(abs($s));
-		// $this->MyModel->coba();
 	}
 
 }

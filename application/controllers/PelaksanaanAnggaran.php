@@ -76,6 +76,7 @@ class PelaksanaanAnggaran extends CI_Controller {
 							$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 						} else {
 								$resp = $this->MyModel->insert_to_table($this->table_name,$params);
+								$resp['id'] =  $this->MyModel->get_last_id($this->table_name);
 						}
 						json_output($respStatus,$resp);
 		        	}
