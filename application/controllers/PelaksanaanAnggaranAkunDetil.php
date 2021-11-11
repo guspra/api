@@ -42,6 +42,24 @@ class PelaksanaanAnggaranAkunDetil extends CI_Controller {
 			}
 		}
 	}
+	
+	public function totalPelaksanaanAnggaranByDipaAkunDetil() //parameter didapet dari url
+	{ 
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->total_pelaksanaan_anggaran_by_dipa_akun_detil();
+						json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
 	public function getDetailByPelaksanaanAnggaran($id_pelaksanaan_anggaran) //parameter didapet dari url
 	{
 		$method = $_SERVER['REQUEST_METHOD'];
