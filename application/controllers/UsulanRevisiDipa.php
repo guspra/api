@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class PelaksanaanAnggaranAkunDetil extends CI_Controller {
-	var $table_name = 'pelaksanaan_anggaran_akun_detil';
+class UsulanRevisiDipa extends CI_Controller {
+	var $table_name = 'usulan_revisi_dipa';
 
     public function __construct()
     {
@@ -42,42 +42,7 @@ class PelaksanaanAnggaranAkunDetil extends CI_Controller {
 			}
 		}
 	}
-	
-	public function totalPelaksanaanAnggaranAkunDetil() //parameter didapet dari url
-	{ 
-		$method = $_SERVER['REQUEST_METHOD'];
-		if($method != 'GET'){
-			json_output(400,array('status' => 400,'message' => 'Bad request.'));
-		} else {
-			$check_auth_client = $this->MyModel->check_auth_client();
-			if($check_auth_client == true){
-		        	$response = $this->MyModel->auth();
-		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->total_pelaksanaan_anggaran_akun_detil();
-						json_output($response['status'],$resp);
-		        	}
-			}
-		}
-	}
-	
-	public function totalPelaksanaanAnggaranAkunDetilByDipa($id_dipa) //parameter didapet dari url
-	{ 
-		$method = $_SERVER['REQUEST_METHOD'];
-		if($method != 'GET'){
-			json_output(400,array('status' => 400,'message' => 'Bad request.'));
-		} else {
-			$check_auth_client = $this->MyModel->check_auth_client();
-			if($check_auth_client == true){
-		        	$response = $this->MyModel->auth();
-		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->total_pelaksanaan_anggaran_akun_detil_by_dipa($id_dipa);
-						json_output($response['status'],$resp);
-		        	}
-			}
-		}
-	}
-
-	public function getDetailByPelaksanaanAnggaran($id_pelaksanaan_anggaran) //parameter didapet dari url
+	public function getDetailByDipa($id_dipa) //parameter didapet dari url
 	{
 		$method = $_SERVER['REQUEST_METHOD'];
 		if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
@@ -87,7 +52,7 @@ class PelaksanaanAnggaranAkunDetil extends CI_Controller {
 			if($check_auth_client == true){
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->get_row_detail_by_foreignkey($this->table_name,$id_pelaksanaan_anggaran,"id_pelaksanaan_anggaran");
+		        		$resp = $this->MyModel->get_row_detail_by_foreignkey($this->table_name,$id_dipa,"id_dipa");
 						json_output($response['status'],$resp);
 		        	}
 			}
@@ -106,7 +71,7 @@ class PelaksanaanAnggaranAkunDetil extends CI_Controller {
 		        	$respStatus = $response['status'];
 		        	if($response['status'] == 200){
 						$params = json_decode(file_get_contents('php://input'), TRUE);
-						if (empty($params['kode_akun']) || empty($params['uraian_detil']) || empty($params['jumlah_realisasi']) || empty($params['id_pelaksanaan_anggaran'])) {//ISI NAMA PARAMETER INPUT POST NYA
+						if (empty($params['jenis_revisi']) || empty($params['url_file']) || empty($params['id_user_verifikator_terakhir']) || empty($params['id_dipa'])) {//ISI NAMA PARAMETER INPUT POST NYA
 							$respStatus = 400;
 							$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 						} else {
@@ -131,7 +96,7 @@ class PelaksanaanAnggaranAkunDetil extends CI_Controller {
 				if($response['status'] == 200){
 					$params = json_decode(file_get_contents('php://input'), TRUE);
 					$params['updated_at'] = date('Y-m-d H:i:s');
-					if (empty($params['kode_akun']) || empty($params['uraian_detil']) || empty($params['jumlah_realisasi']) || empty($params['id_pelaksanaan_anggaran'])) { //CEK PARAMETER INPUT NYA
+					if (empty($params['jenis_revisi']) || empty($params['url_file']) || empty($params['id_user_verifikator_terakhir']) || empty($params['id_dipa'])) { //CEK PARAMETER INPUT NYA
 						$respStatus = 400;
 						$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 					} else {
