@@ -108,6 +108,11 @@ class MyModel extends CI_Model {
         return $this->db->select('*')->from($table)->where($column,$foreignkey)->order_by('id','desc')->get()->result();
     }
 
+    public function get_row_detail_by_two_foreignkey($table, $foreignkey1, $foreignkey2, $column1, $column2)
+    {
+        return $this->db->select('*')->from($table)->where([$column1=>$foreignkey1, $column2 => $foreignkey2])->order_by('id','desc')->get()->result();
+    }
+
     public function get_all_rows_table($table_name)
     {
         return $this->db->select('*')->from($table_name)->order_by('id','asc')->get()->result();
