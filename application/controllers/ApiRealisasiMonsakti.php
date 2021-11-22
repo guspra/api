@@ -33,6 +33,24 @@ class ApiRealisasiMonsakti extends CI_Controller {
 			}
 		}
 	}
+	
+	public function tes(){
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		// $resp = $this->MyModel->total_realisasi_monsakti();
+						$resp= ["januari_pegawai" => "1111",
+								"januari_barang" => 2222];
+	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
 
 	public function TotalRealisasiByKodeSatker($kode_satker){
 		$method = $_SERVER['REQUEST_METHOD'];
@@ -66,6 +84,22 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		}
 	}
 
+	public function TotalRealisasiJenisBelanjaPerbulan(){
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_monsakti();
+	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
 	public function TotalRealisasiJenisBelanjaByKodeSatker($kode_satker){
 		$method = $_SERVER['REQUEST_METHOD'];
 		if($method != 'GET'){
@@ -76,6 +110,22 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
 		        		$resp = $this->MyModel->total_realisasi_jenis_belanja_by_kode_satker_monsakti($kode_satker);
+	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
+	public function TotalRealisasiJenisBelanjaPerbulanByKodeSatker($kode_satker){
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_by_kode_satker_monsakti($kode_satker);
 	    				json_output($response['status'],$resp);
 		        	}
 			}
