@@ -255,6 +255,15 @@ class MyModel extends CI_Model {
         return $this->db->query("SELECT id_dipa, id_pelaksanaan_anggaran, COUNT(*) as jumlah_akun_detil , SUM(jumlah_realisasi) as total_realisasi FROM pelaksanaan_anggaran JOIN pelaksanaan_angGaran_akun_detil ON pelaksanaan_anggaran.id = id_pelaksanaan_anggaran WHERE id_dipa = $id_dipa GROUP BY id_dipa, id_pelaksanaan_anggaran")->result();
     }
 
+    public function usulan_revisi_dipa_join_verifikasi($id_dipa, $id_user_yang_login){
+        return $this->db->query(
+        "SELECT usulan_revisi_dipa.id , jenis_revisi, keterangan, url_file, id_user_verifikator_terakhir, id_dipa, id_user_verifikator, status_verifikasi
+        FROM usulan_revisi_dipa
+        LEFT JOIN verifikasi_usulan_revisi_dipa 
+        ON usulan_revisi_dipa.id = verifikasi_usulan_revisi_dipa.id_usulan_revisi_dipa AND id_user_verifikator = $id_user_yang_login
+        WHERE id_dipa = $id_dipa")->result();
+    }
+
     public function coba(){
         
         //DAPETIN TOTAL ANGGARAN DIPA HAM

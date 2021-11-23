@@ -59,6 +59,25 @@ class UsulanRevisiDipa extends CI_Controller {
 		}
 	}
 
+	public function getDetailByDipaJoinVerifikasi($id_dipa, $id_user_yang_login) //parameter didapet dari url
+	{
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->usulan_revisi_dipa_join_verifikasi($id_dipa,$id_user_yang_login);
+						json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
+
+
     public function create()
 	{
 		$method = $_SERVER['REQUEST_METHOD'];
