@@ -141,6 +141,26 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		}
 	}
 
+	public function realiasiPerBulanPerKodeSatker($kode_satker){
+		$data_realisasi = [
+			"pegawai" => [0,0,0,0,0,0,0,0,0,0,0,0],
+			"barang" => [0,0,0,0,0,0,0,0,0,0,0,0],
+			"modal" => [0,0,0,0,0,0,0,0,0,0,0,0]	
+		];
+
+		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_by_kode_satker_monsakti($kode_satker);
+
+		foreach($resp as $key => $value){
+			$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
+			$bulan = $this->month_to_number[$value->bulan_realisasi];
+			$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
+		}
+
+		// return 1234;
+		// return json_encode($data_realisasi);
+		return $data_realisasi;
+	}
+
 	public function dataGrafikDeviasiRpdRealisasi($kode_satker){
 		$data_realisasi = [
 			"pegawai" => [0,0,0,0,0,0,0,0,0,0,0,0],
@@ -168,6 +188,46 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		        	}
 			}
 		}
+	}
+
+	public function dataGrafikDeviasiRpdRealisasiSemuaSatker(){
+		// $arr = [
+		// 	"409226" => 1,
+		// 	"409225" => []
+		// ];
+
+		// $arr["409226"] = json_encode($this->dataGrafikDeviasiRpdRealisasi(409226));
+		// $arr["409226"] = $this->dataGrafikDeviasiRpdRealisasi(409226);
+		// echo $this->dataGrafikDeviasiRpdRealisasi(409226);
+		// json_output(200, $this->realiasiPerBulanPerKodeSatker(409226));
+		// json_encode($this->dataGrafikDeviasiRpdRealisasi(409226));
+
+		$arr["407607"] = $this->realiasiPerBulanPerKodeSatker(407607);
+		$arr["407613"] = $this->realiasiPerBulanPerKodeSatker(407613);
+		$arr["407622"] = $this->realiasiPerBulanPerKodeSatker(407622);
+		$arr["407638"] = $this->realiasiPerBulanPerKodeSatker(407638);
+		$arr["407644"] = $this->realiasiPerBulanPerKodeSatker(407644);
+		$arr["407653"] = $this->realiasiPerBulanPerKodeSatker(407653);
+		$arr["408247"] = $this->realiasiPerBulanPerKodeSatker(408247);
+		$arr["408649"] = $this->realiasiPerBulanPerKodeSatker(408649);
+		$arr["409220"] = $this->realiasiPerBulanPerKodeSatker(409220);
+		$arr["409221"] = $this->realiasiPerBulanPerKodeSatker(409221);
+		$arr["409222"] = $this->realiasiPerBulanPerKodeSatker(409222);
+		$arr["409223"] = $this->realiasiPerBulanPerKodeSatker(409223);
+		$arr["409224"] = $this->realiasiPerBulanPerKodeSatker(409224);
+		$arr["409225"] = $this->realiasiPerBulanPerKodeSatker(409225);
+		$arr["409226"] = $this->realiasiPerBulanPerKodeSatker(409226);
+		$arr["409227"] = $this->realiasiPerBulanPerKodeSatker(409227);
+		$arr["409228"] = $this->realiasiPerBulanPerKodeSatker(409228);
+		$arr["418351"] = $this->realiasiPerBulanPerKodeSatker(418351);
+		$arr["418938"] = $this->realiasiPerBulanPerKodeSatker(418938);
+		$arr["632734"] = $this->realiasiPerBulanPerKodeSatker(632734);
+		$arr["652412"] = $this->realiasiPerBulanPerKodeSatker(652412);
+		$arr["652923"] = $this->realiasiPerBulanPerKodeSatker(652923);
+		$arr["653182"] = $this->realiasiPerBulanPerKodeSatker(653182);
+		$arr["653417"] = $this->realiasiPerBulanPerKodeSatker(653417);
+		$arr["683373"] = $this->realiasiPerBulanPerKodeSatker(683373);
+		json_output(200, $arr);
 	}
 
 	public function insertall(){
