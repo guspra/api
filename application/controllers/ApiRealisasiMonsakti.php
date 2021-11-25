@@ -8,6 +8,15 @@ class ApiRealisasiMonsakti extends CI_Controller {
 							  "408247","408649","409220","409221","409222","409223",
 							  "409224","409225","409226","409227","409228","418351",
 							  "418938","632734","652412","652923","653182","653417","683373"];
+	
+	var $month_to_number = [
+		"JAN" => 1, "FEB" => 2, "APR" => 3, "MAR" => 4, "MAY" => 5, "JUN" => 6, 
+		"JUL" => 7, "AUG" => 8, "SEP" => 9, "OCT" => 10, "NOV" => 11, "DES" => 12
+	];
+
+	var $number_to_jenis_belanja = [
+		"51" => "pegawai", "52" => "barang", "53" => "modal"
+	];
 
 	public function __construct()
     {
@@ -127,6 +136,35 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		        	if($response['status'] == 200){
 		        		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_by_kode_satker_monsakti($kode_satker);
 	    				json_output($response['status'],$resp);
+		        	}
+			}
+		}
+	}
+
+	public function dataGrafikDeviasiRpdRealisasi($kode_satker){
+		$data_realisasi = [
+			"pegawai" => [0,0,0,0,0,0,0,0,0,0,0,0],
+			"barang" => [0,0,0,0,0,0,0,0,0,0,0,0],
+			"modal" => [0,0,0,0,0,0,0,0,0,0,0,0]	
+		];
+		
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_by_kode_satker_monsakti($kode_satker);
+
+						foreach($resp as $key => $value){
+							$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
+							$bulan = $this->month_to_number[$value->bulan_realisasi];
+							$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
+						}
+
+						json_output($response['status'],$data_realisasi);
 		        	}
 			}
 		}
