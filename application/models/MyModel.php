@@ -265,7 +265,7 @@ class MyModel extends CI_Model {
     }
 
     public function daftar_verifikator_usulan_revisi_dipa($id_usulan_revisi_dipa){
-        $result = $this->db->query("SELECT id_user_verifikator FROM verifikasi_usulan_revisi_dipa WHERE id_usulan_revisi_dipa = 4 AND status_verifikasi = 'sudah'")->result();
+        $result = $this->db->query("SELECT id_user_verifikator FROM verifikasi_usulan_revisi_dipa WHERE id_usulan_revisi_dipa = $id_usulan_revisi_dipa AND status_verifikasi = 'sudah'")->result();
 
         $arr = [];
         foreach($result as $key => $value){
