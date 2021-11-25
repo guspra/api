@@ -264,15 +264,28 @@ class MyModel extends CI_Model {
         WHERE id_dipa = $id_dipa")->result();
     }
 
+    public function daftar_verifikator_usulan_revisi_dipa($id_usulan_revisi_dipa){
+        $result = $this->db->query("SELECT id_user_verifikator FROM verifikasi_usulan_revisi_dipa WHERE id_usulan_revisi_dipa = 4 AND status_verifikasi = 'sudah'")->result();
+
+        $arr = [];
+        foreach($result as $key => $value){
+            $arr[$key] = $value->id_user_verifikator;
+        }
+
+        return $arr;
+    }
+
     public function coba(){
         
         //DAPETIN TOTAL ANGGARAN DIPA HAM
         // $result = $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM api_dipa_pusdatin GROUP BY kode_satker")->result();
         // echo json_encode($result);
 
-        $result = $this->db->query("SELECT SUBSTRING(kode_akun, 1,2) AS JENIS_BELANJA, SUM(nominal_akun) AS TOTAL_REALISASI FROM api_realisasi_pusdatin GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
+        // $result = $this->db->query("SELECT SUBSTRING(kode_akun, 1,2) AS JENIS_BELANJA, SUM(nominal_akun) AS TOTAL_REALISASI FROM api_realisasi_pusdatin GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
         
-        echo json_encode($result);
+        // echo json_encode($result);
+        // return $this->db->query("SELECT id_user_verifikator FROM verifikasi_usulan_revisi_dipa WHERE id_usulan_revisi_dipa = 4 AND status_verifikasi = 'sudah'")->result();
+
     }
 
 }

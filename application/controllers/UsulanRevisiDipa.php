@@ -70,6 +70,18 @@ class UsulanRevisiDipa extends CI_Controller {
 		        	$response = $this->MyModel->auth();
 		        	if($response['status'] == 200){
 		        		$resp = $this->MyModel->usulan_revisi_dipa_join_verifikasi($id_dipa,$id_user_yang_login);
+		        		
+						//tambah status apakah status verifikasi sudah selesai
+						foreach($resp as $key => $value){
+							$id_usulan_revisi_dipa = $value->id;
+							$daftar_verifikator_usulan_revisi_dipa =  $this->MyModel->daftar_verifikator_usulan_revisi_dipa($id_usulan_revisi_dipa);
+							$status_verifikasi_terakhir = "belum";
+							if(in_array($value->id_user_verifikator_terakhir, $daftar_verifikator_usulan_revisi_dipa)){
+								$status_verifikasi_terakhir = "sudah";
+							}
+							$resp[$key]->status_verifikasi_terakhir = $status_verifikasi_terakhir;
+						}
+
 						json_output($response['status'],$resp);
 		        	}
 			}
