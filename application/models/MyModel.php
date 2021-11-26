@@ -275,6 +275,10 @@ class MyModel extends CI_Model {
         return $arr;
     }
 
+    public function all_kode_satker(){
+        return $this->db->query("SELECT id FROM dipa WHERE id <> '00'")->result();
+    }
+
     public function coba(){
         
         //DAPETIN TOTAL ANGGARAN DIPA HAM
