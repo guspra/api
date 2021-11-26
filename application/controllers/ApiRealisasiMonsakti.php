@@ -202,32 +202,63 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		// json_output(200, $this->realiasiPerBulanPerKodeSatker(409226));
 		// json_encode($this->dataGrafikDeviasiRpdRealisasi(409226));
 
-		$arr["407607"] = $this->realiasiPerBulanPerKodeSatker(407607);
-		$arr["407613"] = $this->realiasiPerBulanPerKodeSatker(407613);
-		$arr["407622"] = $this->realiasiPerBulanPerKodeSatker(407622);
-		$arr["407638"] = $this->realiasiPerBulanPerKodeSatker(407638);
-		$arr["407644"] = $this->realiasiPerBulanPerKodeSatker(407644);
-		$arr["407653"] = $this->realiasiPerBulanPerKodeSatker(407653);
-		$arr["408247"] = $this->realiasiPerBulanPerKodeSatker(408247);
-		$arr["408649"] = $this->realiasiPerBulanPerKodeSatker(408649);
-		$arr["409220"] = $this->realiasiPerBulanPerKodeSatker(409220);
-		$arr["409221"] = $this->realiasiPerBulanPerKodeSatker(409221);
-		$arr["409222"] = $this->realiasiPerBulanPerKodeSatker(409222);
-		$arr["409223"] = $this->realiasiPerBulanPerKodeSatker(409223);
-		$arr["409224"] = $this->realiasiPerBulanPerKodeSatker(409224);
-		$arr["409225"] = $this->realiasiPerBulanPerKodeSatker(409225);
-		$arr["409226"] = $this->realiasiPerBulanPerKodeSatker(409226);
-		$arr["409227"] = $this->realiasiPerBulanPerKodeSatker(409227);
-		$arr["409228"] = $this->realiasiPerBulanPerKodeSatker(409228);
-		$arr["418351"] = $this->realiasiPerBulanPerKodeSatker(418351);
-		$arr["418938"] = $this->realiasiPerBulanPerKodeSatker(418938);
-		$arr["632734"] = $this->realiasiPerBulanPerKodeSatker(632734);
-		$arr["652412"] = $this->realiasiPerBulanPerKodeSatker(652412);
-		$arr["652923"] = $this->realiasiPerBulanPerKodeSatker(652923);
-		$arr["653182"] = $this->realiasiPerBulanPerKodeSatker(653182);
-		$arr["653417"] = $this->realiasiPerBulanPerKodeSatker(653417);
-		$arr["683373"] = $this->realiasiPerBulanPerKodeSatker(683373);
-		json_output(200, $arr);
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$arr["407607"] = $this->realiasiPerBulanPerKodeSatker(407607);
+						$arr["407613"] = $this->realiasiPerBulanPerKodeSatker(407613);
+						$arr["407622"] = $this->realiasiPerBulanPerKodeSatker(407622);
+						$arr["407638"] = $this->realiasiPerBulanPerKodeSatker(407638);
+						$arr["407644"] = $this->realiasiPerBulanPerKodeSatker(407644);
+						$arr["407653"] = $this->realiasiPerBulanPerKodeSatker(407653);
+						$arr["408247"] = $this->realiasiPerBulanPerKodeSatker(408247);
+						$arr["408649"] = $this->realiasiPerBulanPerKodeSatker(408649);
+						$arr["409220"] = $this->realiasiPerBulanPerKodeSatker(409220);
+						$arr["409221"] = $this->realiasiPerBulanPerKodeSatker(409221);
+						$arr["409222"] = $this->realiasiPerBulanPerKodeSatker(409222);
+						$arr["409223"] = $this->realiasiPerBulanPerKodeSatker(409223);
+						$arr["409224"] = $this->realiasiPerBulanPerKodeSatker(409224);
+						$arr["409225"] = $this->realiasiPerBulanPerKodeSatker(409225);
+						$arr["409226"] = $this->realiasiPerBulanPerKodeSatker(409226);
+						$arr["409227"] = $this->realiasiPerBulanPerKodeSatker(409227);
+						$arr["409228"] = $this->realiasiPerBulanPerKodeSatker(409228);
+						$arr["418351"] = $this->realiasiPerBulanPerKodeSatker(418351);
+						$arr["418938"] = $this->realiasiPerBulanPerKodeSatker(418938);
+						$arr["632734"] = $this->realiasiPerBulanPerKodeSatker(632734);
+						$arr["652412"] = $this->realiasiPerBulanPerKodeSatker(652412);
+						$arr["652923"] = $this->realiasiPerBulanPerKodeSatker(652923);
+						$arr["653182"] = $this->realiasiPerBulanPerKodeSatker(653182);
+						$arr["653417"] = $this->realiasiPerBulanPerKodeSatker(653417);
+						$arr["683373"] = $this->realiasiPerBulanPerKodeSatker(683373);
+
+
+						$arr2 = [
+							"pegawai" => [],
+							"barang" => [],
+							"modal" => []
+						];
+
+						foreach($arr as $key => $val){
+							$arr2["pegawai"][$key] = $val["pegawai"];
+						}
+						foreach($arr as $key => $val){
+							$arr2["barang"][$key] = $val["barang"];
+						}
+						foreach($arr as $key => $val){
+							$arr2["modal"][$key] = $val["modal"];
+						}
+						
+						json_output($response['status'],$arr2);
+		        	}
+			}
+		}
+
+		
 	}
 
 	public function insertall(){
