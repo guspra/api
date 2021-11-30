@@ -11,7 +11,7 @@ class ApiRealisasiMonsakti extends CI_Controller {
 	
 	var $month_to_number = [
 		"JAN" => 1, "FEB" => 2, "APR" => 3, "MAR" => 4, "MAY" => 5, "JUN" => 6, 
-		"JUL" => 7, "AUG" => 8, "SEP" => 9, "OCT" => 10, "NOV" => 11, "DES" => 12
+		"JUL" => 7, "AUG" => 8, "SEP" => 9, "OCT" => 10, "NOV" => 11, "DEC" => 12
 	];
 
 	var $number_to_jenis_belanja = [

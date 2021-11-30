@@ -52,6 +52,59 @@ class ApiDipaPusdatin extends CI_Controller {
 		}
 	}
 
+	public function TotalPaguJenisBelanjaByKodeSatker($kode_satker){
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->pagu_per_jenis_belanja_per_kode_satker($kode_satker);
+						$arr = [
+							'pegawai' => 0,
+							'barang' => 0,
+							'modal' => 0
+						];
+						foreach($resp as $key => $value){
+							$arr[$value->jenis_belanja] = $value->total_pagu;
+						}
+	    				json_output($response['status'],$arr);
+		        	}
+			}
+		}
+	}
+
+	public function TotalPaguJenisBelanja(){
+		$method = $_SERVER['REQUEST_METHOD'];
+		if($method != 'GET'){
+			json_output(400,array('status' => 400,'message' => 'Bad request.'));
+		} else {
+			$check_auth_client = $this->MyModel->check_auth_client();
+			if($check_auth_client == true){
+		        	$response = $this->MyModel->auth();
+		        	if($response['status'] == 200){
+		        		$resp = $this->MyModel->pagu_per_jenis_belanja();
+						$arr = [];
+						foreach($resp as $key => $value){
+							$arr[$value->kode_satker] = [
+								'pegawai' => 0,
+								'barang' => 0,
+								'modal' => 0
+							];
+						}
+						foreach($resp as $key => $value){
+							$arr[$value->kode_satker][$value->jenis_belanja] = $value->total_pagu;
+						}
+	    				json_output($response['status'],$arr);
+		        	}
+			}
+		}
+	}
+
+
+
 	public function insert()
 	{
 		$this->MyModel->delete_all_rows($this->table_name); //DELETE DULU SEMUA DATANYA

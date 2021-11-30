@@ -247,7 +247,27 @@ class MyModel extends CI_Model {
         return $this->db->query("SELECT kode_satker, SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(nominal_akun) AS total_realisasi FROM api_realisasi_pusdatin GROUP BY kode_satker, SUBSTRING(kode_akun, 1,2) ")->result();
     }
 
-    
+    public function pagu_per_jenis_belanja(){
+        return $this->db->query("SELECT kode_satker, 
+                IF(SUBSTRING(kode_akun, 1,2) = '51', 'pegawai', IF(SUBSTRING(kode_akun, 1,2) = '52', 'barang', 'modal')) as jenis_belanja, 
+                SUM(nominal_akun) AS total_pagu
+                FROM api_dipa_pusdatin
+                GROUP BY
+                kode_satker, SUBSTRING(kode_akun, 1,2)
+        ")->result();
+    }
+
+    public function pagu_per_jenis_belanja_per_kode_satker($kode_satker){
+        return $this->db->query("SELECT 
+                IF(SUBSTRING(kode_akun, 1,2) = '51', 'pegawai', IF(SUBSTRING(kode_akun, 1,2) = '52', 'barang', 'modal')) as jenis_belanja, 
+                SUM(nominal_akun) AS total_pagu
+                FROM api_dipa_pusdatin
+                WHERE kode_satker = $kode_satker
+                GROUP BY
+                SUBSTRING(kode_akun, 1,2)
+        ")->result();
+    }
+
     
     public function total_pagu(){
         return $this->db->query("SELECT kode_satker, SUM(nominal_akun) AS jumlah FROM api_dipa_pusdatin GROUP BY kode_satker")->result();
