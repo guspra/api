@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class PelaksanaanAnggaran extends CI_Controller {
-	var $table_name = 'pelaksanaan_anggaran';
+class Monitoring extends CI_Controller {
+	var $table_name = 'monitoring';
 
     public function __construct()
     {
@@ -26,22 +26,23 @@ class PelaksanaanAnggaran extends CI_Controller {
 		}
 	}
 
-	public function detail($id) //parameter didapet dari url
-	{
-		$method = $_SERVER['REQUEST_METHOD'];
-		if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
-			json_output(400,array('status' => 400,'message' => 'Bad request.'));
-		} else {
-			$check_auth_client = $this->MyModel->check_auth_client();
-			if($check_auth_client == true){
-		        	$response = $this->MyModel->auth();
-		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->get_row_detail($this->table_name,$id);
-						json_output($response['status'],$resp);
-		        	}
-			}
-		}
-	}
+	// public function detail($id) //parameter didapet dari url
+	// {
+	// 	$method = $_SERVER['REQUEST_METHOD'];
+	// 	if($method != 'GET' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
+	// 		json_output(400,array('status' => 400,'message' => 'Bad request.'));
+	// 	} else {
+	// 		$check_auth_client = $this->MyModel->check_auth_client();
+	// 		if($check_auth_client == true){
+	// 	        	$response = $this->MyModel->auth();
+	// 	        	if($response['status'] == 200){
+	// 	        		$resp = $this->MyModel->get_row_detail($this->table_name,$id);
+	// 					json_output($response['status'],$resp);
+	// 	        	}
+	// 		}
+	// 	}
+	// }
+
 	public function getDetailByDipa($id_dipa) //parameter didapet dari url
 	{
 		$method = $_SERVER['REQUEST_METHOD'];
@@ -71,12 +72,11 @@ class PelaksanaanAnggaran extends CI_Controller {
 		        	$respStatus = $response['status'];
 		        	if($response['status'] == 200){
 						$params = json_decode(file_get_contents('php://input'), TRUE);
-						if (empty($params['uraian']) || empty($params['url_file']) || empty($params['tanggal_mulai']) || empty($params['tanggal_selesai']) || empty($params['id_dipa'])) {//ISI NAMA PARAMETER INPUT POST NYA
+						if (empty($params['id_dipa'])) {//ISI NAMA PARAMETER INPUT POST NYA
 							$respStatus = 400;
 							$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
 						} else {
 								$resp = $this->MyModel->insert_to_table($this->table_name,$params);
-								$resp['id'] =  $this->MyModel->get_last_id($this->table_name);
 						}
 						json_output($respStatus,$resp);
 		        	}
@@ -84,7 +84,7 @@ class PelaksanaanAnggaran extends CI_Controller {
 		}
 	}
 
-    public function update($id)
+    public function update($id_dipa)
 	{
 		$method = $_SERVER['REQUEST_METHOD'];
 		if($method != 'PUT' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
@@ -97,11 +97,12 @@ class PelaksanaanAnggaran extends CI_Controller {
 				if($response['status'] == 200){
 					$params = json_decode(file_get_contents('php://input'), TRUE);
 					$params['updated_at'] = date('Y-m-d H:i:s');
-					if (empty($params['uraian']) || empty($params['url_file']) || empty($params['tanggal_mulai']) || empty($params['tanggal_selesai']) || empty($params['id_dipa'])) { //CEK PARAMETER INPUT NYA
-						$respStatus = 400;
-						$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
-					} else {
-		        			$resp = $this->MyModel->update_data_table($this->table_name,$id,$params);
+					// if (empty($params['id_dipa'])) { //CEK PARAMETER INPUT NYA
+					// 	$respStatus = 400;
+					// 	$resp = array('status' => 400,'message' =>  'Input form masih salah, silahkan coba lagi');
+					// } else 
+					{
+		        			$resp = $this->MyModel->update_data_table_non_id($this->table_name,'id_dipa',$id_dipa,$params);
 					}
 					json_output($respStatus,$resp);
 		       	}
@@ -109,20 +110,20 @@ class PelaksanaanAnggaran extends CI_Controller {
 		}
 	}
 
-    public function delete($id)
-	{
-		$method = $_SERVER['REQUEST_METHOD'];
-		if($method != 'DELETE' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
-			json_output(400,array('status' => 400,'message' => 'Bad request.'));
-		} else {
-			$check_auth_client = $this->MyModel->check_auth_client();
-			if($check_auth_client == true){
-		        	$response = $this->MyModel->auth();
-		        	if($response['status'] == 200){
-		        		$resp = $this->MyModel->delete_data_table($this->table_name,$id); //DELETE SINGLE ROW
-					json_output($response['status'],$resp);
-		        	}
-			}
-		}
-	}
+    // public function delete($id)
+	// {
+	// 	$method = $_SERVER['REQUEST_METHOD'];
+	// 	if($method != 'DELETE' || $this->uri->segment(3) == '' || is_numeric($this->uri->segment(3)) == FALSE){
+	// 		json_output(400,array('status' => 400,'message' => 'Bad request.'));
+	// 	} else {
+	// 		$check_auth_client = $this->MyModel->check_auth_client();
+	// 		if($check_auth_client == true){
+	// 	        	$response = $this->MyModel->auth();
+	// 	        	if($response['status'] == 200){
+	// 	        		$resp = $this->MyModel->delete_data_table($this->table_name,$id); //DELETE SINGLE ROW
+	// 				json_output($response['status'],$resp);
+	// 	        	}
+	// 		}
+	// 	}
+	// }
 }

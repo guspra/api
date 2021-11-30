@@ -147,6 +147,16 @@ class MyModel extends CI_Model {
 
     }
 
+    public function update_data_table_non_id($table_name, $column_name,$column_value,$data)
+    {
+        if($this->is_exist_non_id($table_name, $column_name, $column_value) > 0){
+            $this->db->where($column_name,$column_value)->update($table_name,$data);
+            return array('status' => 200,'message' => 'Data berhasil di update');
+        } 
+        else return array('status' => 200,'message' => 'Tidak ada kolom yang cocok');
+
+    }
+
     public function delete_data_table($table_name, $id)
     {
         if($this->is_exist($table_name, $id)){
@@ -164,6 +174,10 @@ class MyModel extends CI_Model {
 
     public function is_exist($table_name, $id){
         return $this->db->query("SELECT * FROM $table_name WHERE id = $id")->num_rows();
+    }
+
+    public function is_exist_non_id($table_name, $column_name, $column_value){
+        return $this->db->query("SELECT * FROM $table_name WHERE $column_name = $column_value")->num_rows();
     }
 
     public function book_update_data($id,$data)
