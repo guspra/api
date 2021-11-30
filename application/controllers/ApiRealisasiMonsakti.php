@@ -14,6 +14,11 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		"JUL" => 7, "AUG" => 8, "SEP" => 9, "OCT" => 10, "NOV" => 11, "DEC" => 12
 	];
 
+	var $month_to_string_number = [
+		"JAN" => "01", "FEB" => "02", "APR" => "03", "MAR" => "04", "MAY" => "05", "JUN" => "06", 
+		"JUL" => "07", "AUG" => "08", "SEP" => "09", "OCT" => "10", "NOV" => "11", "DEC" => "12"
+	];
+
 	var $number_to_jenis_belanja = [
 		"51" => "pegawai", "52" => "barang", "53" => "modal"
 	];
@@ -297,9 +302,12 @@ class ApiRealisasiMonsakti extends CI_Controller {
 			$data_api['kode_sumber_dana'] = (empty($value->{'SUMBER_DANA'}) ? "null" : $value->{'SUMBER_DANA'});
 			$data_api['kode_akun'] = (empty($value->{'AKUN'}) ? "null" : $value->{'AKUN'});
 			$data_api['jumlah_realisasi'] = (empty($value->{'JUMLAH_REALISASI'}) ? 0 : $value->{'JUMLAH_REALISASI'});
-			$data_api['tanggal_realisasi'] = (empty($value->{'TANGGAL_REALISASI'}) ? "null" : $value->{'TANGGAL_REALISASI'});
-
+			$tanggal_realisasi = (empty($value->{'TANGGAL_REALISASI'}) ? "01-JAN-20" : $value->{'TANGGAL_REALISASI'});
+			$data_api['tanggal_realisasi'] = "20".substr($tanggal_realisasi,7,2).$this->month_to_string_number[substr($tanggal_realisasi,3,3)].substr($tanggal_realisasi,0,2);
 			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api);
+			// echo $data_api['tanggal_realisasi'];
+			// echo "###";
+			// if($counter == 3) break;
 			$counter++;
 
 			
