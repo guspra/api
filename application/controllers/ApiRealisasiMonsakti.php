@@ -165,7 +165,7 @@ class ApiRealisasiMonsakti extends CI_Controller {
 			// if ($value->bulan_realisasi == "00"){ var_dump($value); exit;}
 			$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
 			$bulan = $this->string_to_number[$value->bulan_realisasi];
-			$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
+			$data_realisasi[$jenis_belanja][$bulan-1] = $value->total_realisasi;
 		}
 
 		// return 1234;
@@ -192,8 +192,8 @@ class ApiRealisasiMonsakti extends CI_Controller {
 
 						foreach($resp as $key => $value){
 							$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
-							$bulan = $this->string_to_number[$value->bulan_realisasi];
-							$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
+							$bulan = $this->string_to_number	[$value->bulan_realisasi];
+							$data_realisasi[$jenis_belanja][$bulan-1] = $value->total_realisasi;
 						}
 
 						json_output($response['status'],$data_realisasi);
