@@ -232,7 +232,7 @@ class MyModel extends CI_Model {
     }
 
     public function total_realisasi_jenis_belanja_perbulan_monsakti(){
-        return $this->db->query("SELECT kode_satker, SUBSTRING(tanggal_realisasi, 4,3) AS bulan_realisasi, SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(jumlah_realisasi) AS total_realisasi FROM api_realisasi_monsakti GROUP BY kode_satker, SUBSTRING(tanggal_realisasi, 4,3), SUBSTRING(kode_akun, 1,2) ")->result();
+        return $this->db->query("SELECT kode_satker, SUBSTRING(tanggal_realisasi, 6,2) AS bulan_realisasi, SUBSTRING(kode_akun, 1,2) AS jenis_belanja, SUM(jumlah_realisasi) AS total_realisasi FROM api_realisasi_monsakti GROUP BY kode_satker, SUBSTRING(tanggal_realisasi, 6,2), SUBSTRING(kode_akun, 1,2) ")->result();
     }
 
     public function total_realisasi_jenis_belanja_by_kode_satker_monsakti($kode_satker){

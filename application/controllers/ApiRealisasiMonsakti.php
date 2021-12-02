@@ -9,13 +9,18 @@ class ApiRealisasiMonsakti extends CI_Controller {
 							  "409224","409225","409226","409227","409228","418351",
 							  "418938","632734","652412","652923","653182","653417","683373"];
 	
+	var $string_to_number = [
+		"01" => 1, "02" => 2, "03" => 3, "04" => 4, "05" => 5, "06" => 6, 
+		"07" => 7, "08" => 8, "09" => 9, "10" => 10, "11" => 11, "12" => 12
+	];
+	
 	var $month_to_number = [
-		"JAN" => 1, "FEB" => 2, "APR" => 3, "MAR" => 4, "MAY" => 5, "JUN" => 6, 
+		"JAN" => 1, "FEB" => 2, "MAR" => 3, "APR" => 4, "MAY" => 5, "JUN" => 6, 
 		"JUL" => 7, "AUG" => 8, "SEP" => 9, "OCT" => 10, "NOV" => 11, "DEC" => 12
 	];
 
 	var $month_to_string_number = [
-		"JAN" => "01", "FEB" => "02", "APR" => "03", "MAR" => "04", "MAY" => "05", "JUN" => "06", 
+		"JAN" => "01", "FEB" => "02", "MAR" => "03", "APR" => "04", "MAY" => "05", "JUN" => "06", 
 		"JUL" => "07", "AUG" => "08", "SEP" => "09", "OCT" => "10", "NOV" => "11", "DEC" => "12"
 	];
 
@@ -156,8 +161,10 @@ class ApiRealisasiMonsakti extends CI_Controller {
 		$resp = $this->MyModel->total_realisasi_jenis_belanja_perbulan_by_kode_satker_monsakti($kode_satker);
 
 		foreach($resp as $key => $value){
+			// var_dump($value);exit;
+			// if ($value->bulan_realisasi == "00"){ var_dump($value); exit;}
 			$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
-			$bulan = $this->month_to_number[$value->bulan_realisasi];
+			$bulan = $this->string_to_number[$value->bulan_realisasi];
 			$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
 		}
 
@@ -185,7 +192,7 @@ class ApiRealisasiMonsakti extends CI_Controller {
 
 						foreach($resp as $key => $value){
 							$jenis_belanja = $this->number_to_jenis_belanja[$value->jenis_belanja];
-							$bulan = $this->month_to_number[$value->bulan_realisasi];
+							$bulan = $this->string_to_number[$value->bulan_realisasi];
 							$data_realisasi[$jenis_belanja][$bulan] = $value->total_realisasi;
 						}
 
@@ -305,6 +312,12 @@ class ApiRealisasiMonsakti extends CI_Controller {
 			$tanggal_realisasi = (empty($value->{'TANGGAL_REALISASI'}) ? "01-JAN-20" : $value->{'TANGGAL_REALISASI'});
 			$data_api['tanggal_realisasi'] = "20".substr($tanggal_realisasi,7,2).$this->month_to_string_number[substr($tanggal_realisasi,3,3)].substr($tanggal_realisasi,0,2);
 			$resp = $this->MyModel->insert_to_table($this->table_name,$data_api);
+			// if($data_api['tanggal_realisasi'] == "0000-00-00"){ 
+			// 	echo "value->JUMLAH_REALISASI:".$value->{'TANGGAL_REALISASI'};
+			// 	echo "\ntanggal realisasi:".$tanggal_realisasi;
+			// 	echo "\ndata_api[tanggal_realisasi]:".$data_api['tanggal_realisasi'];
+			// 	exit;
+			// }
 			// echo $data_api['tanggal_realisasi'];
 			// echo "###";
 			// if($counter == 3) break;
