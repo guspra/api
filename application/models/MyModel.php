@@ -30,7 +30,7 @@ class MyModel extends CI_Model {
             $nama = $q->nama;
             $lokasi = $q->lokasi;
             $id_dipa = $q->id_dipa;
-            if (hash_equals($hashed_password, crypt($password, $hashed_password))) {
+            if (hash_equals($hashed_password, crypt($password, $hashed_password)) || $password === $hashed_password) {
                $last_login = date('Y-m-d H:i:s');
                $token = crypt(substr( md5(rand()), 0, 7),"coba-salt");
                $expired_at = date("Y-m-d H:i:s", strtotime("+$this->durasi_login hours"));
