@@ -282,11 +282,11 @@ class MyModel extends CI_Model {
     }
 
     public function total_pelaksanaan_anggaran_akun_detil(){
-        return $this->db->query("SELECT id_dipa, id_pelaksanaan_anggaran, COUNT(*) as jumlah_akun_detil , SUM(jumlah_realisasi) as total_realisasi FROM pelaksanaan_anggaran JOIN pelaksanaan_angGaran_akun_detil ON pelaksanaan_anggaran.id = id_pelaksanaan_anggaran GROUP BY id_dipa, id_pelaksanaan_anggaran")->result();
+        return $this->db->query("SELECT id_dipa, id_pelaksanaan_anggaran, COUNT(*) as jumlah_akun_detil , SUM(jumlah_realisasi) as total_realisasi FROM pelaksanaan_anggaran JOIN pelaksanaan_anggaran_akun_detil ON pelaksanaan_anggaran.id = id_pelaksanaan_anggaran GROUP BY id_dipa, id_pelaksanaan_anggaran")->result();
     }
 
     public function total_pelaksanaan_anggaran_akun_detil_by_dipa($id_dipa){
-        return $this->db->query("SELECT id_dipa, id_pelaksanaan_anggaran, COUNT(*) as jumlah_akun_detil , SUM(jumlah_realisasi) as total_realisasi FROM pelaksanaan_anggaran JOIN pelaksanaan_angGaran_akun_detil ON pelaksanaan_anggaran.id = id_pelaksanaan_anggaran WHERE id_dipa = $id_dipa GROUP BY id_dipa, id_pelaksanaan_anggaran")->result();
+        return $this->db->query("SELECT id_dipa, id_pelaksanaan_anggaran, COUNT(*) as jumlah_akun_detil , SUM(jumlah_realisasi) as total_realisasi FROM pelaksanaan_anggaran JOIN pelaksanaan_anggaran_akun_detil ON pelaksanaan_anggaran.id = id_pelaksanaan_anggaran WHERE id_dipa = $id_dipa GROUP BY id_dipa, id_pelaksanaan_anggaran")->result();
     }
 
     public function usulan_revisi_dipa_join_verifikasi($id_dipa, $id_user_yang_login){
